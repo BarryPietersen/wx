@@ -95,6 +95,25 @@ namespace WxChallenge.Core.Tests
             }
         }
 
+        [Fact]
+        public void SortByPopularity_WhenPopular_ShouldBeOrderd() 
+        {
+            // Arrange
+            _sut = new SortService();
+
+            var unsorted = Unsorted();
+            var histories = ShopperHistories();
+
+            var current = unsorted.Max(p => p.Name);
+
+            // Act
+            var sorted = _sut.SortByPopularity(unsorted, histories).ToList();
+
+            // Assert
+            Assert.True(sorted[0].Name == "Product A");
+            Assert.True(sorted[1].Name == "Product B");
+        }
+
         private List<Product> Unsorted() 
         {
             return new List<Product>
@@ -105,6 +124,45 @@ namespace WxChallenge.Core.Tests
                 new Product{ Name = "Product B", Price = 105.0, Quantity = 0},
                 new Product{ Name = "Product C", Price = 110.0, Quantity = 0},
                 new Product{ Name = "Product D", Price = 115.0, Quantity = 0},
+            };
+        }
+
+        private List<ShopperHistory> ShopperHistories() 
+        {
+            return new List<ShopperHistory>
+            {
+                new ShopperHistory
+                {
+                    CustomerId = 1,
+                    Products = new List<Product>
+                    {
+                        new Product
+                        {
+                            Name = "Product A",
+                            Price = 100,
+                            Quantity = 1
+                        }
+                    }
+                },
+                new ShopperHistory
+                {
+                    CustomerId = 2,
+                    Products = new List<Product>
+                    {
+                        new Product
+                        {
+                            Name = "Product A",
+                            Price = 100,
+                            Quantity = 3
+                        },
+                        new Product
+                        {
+                            Name = "Product B",
+                            Price = 200,
+                            Quantity = 55
+                        }
+                    }
+                },
             };
         }
     }

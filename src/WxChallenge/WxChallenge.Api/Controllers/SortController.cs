@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WxChallenge.Api.Services;
 using WxChallenge.Core.Models;
 using WxChallenge.Core.Services;
@@ -26,22 +27,26 @@ namespace WxChallenge.Api.Controllers
 
         // GET: api/<Sort>
         [HttpGet]
-        public ActionResult<IEnumerable<Product>> Get(string sortOption)
+        public async Task<IEnumerable<Product>> Get(string sortOption)
         {
-            var products = _productService.GetAll().Result;
             var sortedProducts = Enumerable.Empty<Product>();
 
             if (sortOption == "Recommended")
             {
-                var shopperHistory = _shopperService.GetShopperHistory().Result;
-                sortedProducts = _sortService.SortByPopularity(products, shopperHistory);
+                var products = _productService.GetAll();
+                var shopperHistory = _shopperService.GetShopperHistory();
+
+                await Task.WhenAll(products, shopperHistory);
+
+                sortedProducts = _sortService.SortByPopularity(products.Result, shopperHistory.Result);
             }
             else
             {
+                var products = await _productService.GetAll();
                 sortedProducts = _sortService.SortByField(products, sortOption);
             }
 
-            return sortedProducts.ToList();
+            return sortedProducts;
         }
     }
 }

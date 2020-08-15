@@ -12,18 +12,18 @@ namespace WxChallenge.Core.Services
 
         public IEnumerable<Product> SortByField(IEnumerable<Product> products, string sortOption)
         {
-            switch (sortOption)
+            switch (sortOption.ToLower())
             {
-                case "Low":
+                case "low":
                     products = products.OrderBy(p => p.Price);
                     break;
-                case "High":
+                case "high":
                     products = products.OrderByDescending(p => p.Price);
                     break;
-                case "Ascending":
+                case "ascending":
                     products = products.OrderBy(p => p.Name);
                     break;
-                case "Descending":
+                case "descending":
                     products = products.OrderByDescending(p => p.Name);
                     break;
                 default:
@@ -32,6 +32,7 @@ namespace WxChallenge.Core.Services
 
             return products;
         }
+
         public IEnumerable<Product> SortByPopularity(IEnumerable<Product> products, IEnumerable<ShopperHistory> histories)
         {
             Dictionary<string, int> popularities = new Dictionary<string, int>();
@@ -54,7 +55,7 @@ namespace WxChallenge.Core.Services
             // the key selector function performs a lookup of the items popularity rating, if any
             var result = products.OrderByDescending(p => popularities.ContainsKey(p.Name) ? popularities[p.Name] : 0).ToList();
 
-            return products;
+            return result;
         }
     }
 }

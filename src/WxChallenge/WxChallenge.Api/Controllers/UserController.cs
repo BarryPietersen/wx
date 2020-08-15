@@ -13,7 +13,7 @@ namespace WxChallenge.Api.Controllers
         [HttpGet]
         public ActionResult<User> Get()
         {
-            return new User { Name = "Test", Token = "1234-455662-22233333-3333" };
+            return new User { Name = "Barry Pieterson", Token = "d863ba63-ea8c-46ea-80e6-35303a5d83bd" };
         }
     }
 }

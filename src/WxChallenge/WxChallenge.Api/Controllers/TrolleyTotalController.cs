@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using WxChallenge.Api.Services;
 using WxChallenge.Core.Models;
 
@@ -19,9 +20,10 @@ namespace WxChallenge.Api.Controllers
 
         // POST: api/<TrolleyTotalController>
         [HttpPost]
-        public ActionResult<double> Get([FromBody] TrolleyDetail details)
+        public async Task<double> Get([FromBody] TrolleyDetail details)
         {
-            var lowest = _trolleyService.GetLowestTotal(details).Result;
+            var lowest = await _trolleyService.GetLowestTotal(details);
+
             return lowest;
         }
     }
